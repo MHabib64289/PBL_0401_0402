@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Search Cars | Web Service Project</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Web Service | Car Project</h1>
+          <h3>Demo:
+            <a href="{{ url_for('createcar') }}">Create</a> /
+            <a href="{{ url_for('readcar') }}">Read</a> /
+            <a href="{{ url_for('updatecar') }}">Update</a> /
+            <a href="{{ url_for('deletecar') }}">Delete</a> /
+            <a href="{{ url_for('searchcar') }}">Search</a>
+          </h3>
+        </div>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <div class="row">
+        <div class="col-md-12">
+          <h4>Search Car Data</h4>
+          <form class="form-inline" method="POST" action="{{ url_for('searchcar') }}">
+            <div class="form-group">
+              <input type="text" name="keyword" class="form-control" style="width: 400px;" placeholder="Enter car name to search..." value="{{ keyword or '' }}">
+            </div>
+            <button type="submit" class="btn btn-primary ml-2">Search</button>
+          </form>
+          <hr>
+
+          {% if keyword %}
+            <h4>Showing results for "<b>{{ keyword }}</b>":</h4>
+            {% if results %}
+              <table class="table table-bordered table-striped">
+                <thead class="thead-light">
+                  <tr>
+                    <th>ID</th>
+                    <th>Car Name</th>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Price</th>
+                    <!-- KOLOM DESCRIPTION DIHILANGKAN -->
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for car in results %}
+                  <tr>
+                    <td>{{ car.id }}</td>
+                    <td>{{ car.carname }}</td>
+                    <td>{{ car.carbrand }}</td>
+                    <td>{{ car.carmodel }}</td>
+                    <td>{{ car.carprice }}</td>
+                    <!-- DATA DESCRIPTION DIHILANGKAN -->
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  </body>
+</html>
